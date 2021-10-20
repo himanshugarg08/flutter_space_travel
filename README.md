@@ -1,7 +1,7 @@
 # Mars - Space Travel
 
-Space Travel UI (created in flutter) Reference from: https://dribbble.com/shots/6520262-Mars
-YouTube Link: https://www.youtube.com/watch?v=fpOZmcTNZIE
+Space Travel UI (created in flutter) Reference from: https://dribbble.com/shots/6520262-Mars.
+YouTube Link: https://www.youtube.com/watch?v=fpOZmcTNZIE.
 
 ## Getting Started
 
