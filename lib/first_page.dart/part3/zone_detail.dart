@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mars/custom_animation.dart';
-import 'package:mars/planet_property.dart';
+import 'package:mars/first_page.dart/part3/planet_property.dart';
 import 'package:mars/second_page/choose_seat.dart';
 
 String aboutMars =

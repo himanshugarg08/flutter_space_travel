@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mars/app_title.dart';
-import 'package:mars/button.dart';
-import 'package:mars/location_mark.dart';
-import 'package:mars/planet.dart';
-import 'package:mars/planet_glow.dart';
-import 'package:mars/planet_glow_gradient.dart';
-import 'package:mars/planet_name.dart';
-import 'package:mars/zone_detail.dart';
-import 'package:mars/zone_list.dart';
+import 'package:mars/first_page.dart/part1/app_title.dart';
+import 'package:mars/first_page.dart/part1/button.dart';
+import 'package:mars/first_page.dart/location_mark.dart';
+import 'package:mars/first_page.dart/part1/planet.dart';
+import 'package:mars/first_page.dart/planet_glow.dart';
+import 'package:mars/first_page.dart/planet_glow_gradient.dart';
+import 'package:mars/first_page.dart/part1/planet_name.dart';
+import 'package:mars/first_page.dart/part3/zone_detail.dart';
+import 'package:mars/first_page.dart/part2/zone_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,10 +24,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   bool showDetails = false;
   bool canClick = false;
 
-  late final AnimationController ac, ac2;
-  late final Animation a, a2;
-  double v = 0.0;
-  double v2 = 0.0;
+  late final AnimationController planetController, zoneController;
+  late final Animation planetAnimation, zoneAnimation;
+  double variableValue = 0.0;
+  double variableValue2 = 0.0;
   double offsetWidthFactor = 0;
   double offsetHeightFactor = 0;
   int currentZone = 0;
@@ -45,21 +45,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    ac = AnimationController(
+    planetController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 2000));
-    ac2 = AnimationController(
+    zoneController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 2000));
-    a = CurvedAnimation(parent: ac, curve: Curves.easeInOutCirc);
-    a2 = CurvedAnimation(parent: ac2, curve: Curves.easeInOutCirc);
-    ac.addListener(() {
-      v = a.value;
+    planetAnimation =
+        CurvedAnimation(parent: planetController, curve: Curves.easeInOutCirc);
+    zoneAnimation =
+        CurvedAnimation(parent: zoneController, curve: Curves.easeInOutCirc);
+    planetController.addListener(() {
+      variableValue = planetAnimation.value;
       setState(() {});
     });
-    ac2.addListener(() {
-      v2 = a2.value;
+    zoneController.addListener(() {
+      variableValue2 = zoneAnimation.value;
       setState(() {});
     });
-    ac.addStatusListener((status) {
+    planetController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         showZone = !showZone;
 
@@ -77,7 +79,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         }
       }
     });
-    ac2.addStatusListener((status) {
+    zoneController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         showDetails = !showDetails;
       } else if (status == AnimationStatus.dismissed) {
@@ -92,8 +94,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    ac.dispose();
-    ac2.dispose();
+    planetController.dispose();
+    zoneController.dispose();
     super.dispose();
   }
 
@@ -102,14 +104,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () {
-        if (v2 == 1) {
+        if (variableValue2 == 1) {
           setState(() {
             showDetails = !showDetails;
           });
-          ac2.reverse();
+          zoneController.reverse();
           Future<bool> closeApp = Future.value(false);
           return closeApp;
-        } else if (v == 1) {
+        } else if (variableValue == 1) {
           // Navigator.pushAndRemoveUntil(context,
           //     MaterialPageRoute(builder: (context) {
           //   return const HomePage();
@@ -124,7 +126,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           children: [
             if (showZone)
               Opacity(
-                opacity: 1 - v2,
+                opacity: 1 - variableValue2,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 30.0, vertical: 100.0),
@@ -156,41 +158,43 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       }),
                 ),
               ),
-            Opacity(opacity: 1 - v, child: const AppTitle()),
+            Opacity(opacity: 1 - variableValue, child: const AppTitle()),
             Opacity(
-                opacity: 1 - 0.5 * v,
+                opacity: 1 - 0.5 * variableValue,
                 child: Transform.scale(
-                  scale: 1 + 0.2 * v,
+                  scale: 1 + 0.2 * variableValue,
                   child: Transform.translate(
-                      offset: Offset(6 * v, -v * size.height * 0.3),
+                      offset: Offset(6 * variableValue,
+                          -variableValue * size.height * 0.3),
                       child: PlanetGlowGradient(
                         begin: showZone ? 0.6 : 0.0,
                       )),
                 )),
             Opacity(
-              opacity: 1 - 0.2 * v,
+              opacity: 1 - 0.2 * variableValue,
               child: Transform.scale(
-                scale: 1 - 0.32 * v,
+                scale: 1 - 0.32 * variableValue,
                 child: Transform.translate(
-                    offset: Offset(8, -v * size.height * 0.34),
+                    offset: Offset(8, -variableValue * size.height * 0.34),
                     child: PlanetGlow(
                       begin: showZone ? 0.5 : 0.0,
                     )),
               ),
             ),
             Transform.scale(
-                scale: 1 - 0.3 * v,
+                scale: 1 - 0.3 * variableValue,
                 child: Transform.translate(
-                    offset: Offset(0, v * 100), child: const PlanetName())),
+                    offset: Offset(0, variableValue * 100),
+                    child: const PlanetName())),
             Transform.translate(
-              offset: Offset(-size.width * offsetWidthFactor * v2,
-                  -size.height * offsetHeightFactor * v2),
+              offset: Offset(-size.width * offsetWidthFactor * variableValue2,
+                  -size.height * offsetHeightFactor * variableValue2),
               child: Transform.scale(
-                scale: 1 + 2 * v2,
+                scale: 1 + 2 * variableValue2,
                 child: Transform.scale(
-                  scale: 1 - 0.32 * v,
+                  scale: 1 - 0.32 * variableValue,
                   child: Transform.translate(
-                      offset: Offset(8, -v * (size.height) * 0.34),
+                      offset: Offset(8, -variableValue * (size.height) * 0.34),
                       child: Planet(
                         begin: showZone ? 1.0 : 2.0,
                         afterEnd: () {
@@ -215,8 +219,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               currentZone = index;
                               offsetWidthFactor = locationValues[index]["x"]!;
                               offsetHeightFactor = locationValues[index]["y"]!;
-                              ac2.reset();
-                              ac2.forward();
+                              zoneController.reset();
+                              zoneController.forward();
                             }
                           },
                           child: LocationMark(
@@ -231,14 +235,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       setState(() {
                         showButton = !showButton;
                       });
-                      ac.reset();
-                      ac.forward();
+                      planetController.reset();
+                      planetController.forward();
                     },
                     child: const ButtonColumn(),
                   )
                 : const SizedBox(),
             showZone
-                ? Opacity(opacity: 1 - v2, child: const ZoneList())
+                ? Opacity(opacity: 1 - variableValue2, child: const ZoneList())
                 : const SizedBox(),
             if (showDetails)
               LocationMark(
@@ -255,7 +259,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   setState(() {
                     showDetails = !showDetails;
                   });
-                  ac2.reverse();
+                  zoneController.reverse();
                 },
               )
           ],
