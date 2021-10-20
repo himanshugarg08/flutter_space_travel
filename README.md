@@ -1,6 +1,7 @@
-# mars
+# Mars - Space Travel
 
-A new Flutter project.
+Space Travel UI (created in flutter) Reference from: https://dribbble.com/shots/6520262-Mars
+YouTube Link: https://www.youtube.com/watch?v=fpOZmcTNZIE
 
 ## Getting Started
 
