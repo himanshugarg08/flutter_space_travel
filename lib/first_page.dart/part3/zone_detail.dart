@@ -120,7 +120,7 @@ class ZoneDetail extends StatelessWidget {
               CustomFadeAnimatedWidget(
                 delay: 600,
                 child: Text(
-                  "Decription",
+                  "Description",
                   style: GoogleFonts.oxygen(
                     color: Colors.white,
                     fontSize: 20,
